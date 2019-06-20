@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lbb.dao.SubContractorModelMapper">
+  <resultMap id="BaseResultMap" type="com.lbb.model.SubContractorModel">
+    <id column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER"/>
+    <result column="sub_contractor_name" property="subContractorName" jdbcType="VARCHAR"/>
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    sub_contractor_id, sub_contractor_name, create_user_id, create_time, last_modify_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from sub_contractor
+    where sub_contractor_id = #{subContractorId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from sub_contractor
+    where sub_contractor_name like concat('%', #{subContractorName, jdbcType=VARCHAR},'%')
+    order by sub_contractor_id asc
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from sub_contractor
+    order by sub_contractor_id asc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete
+    from sub_contractor
+    where sub_contractor_id = #{subContractorId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lbb.model.SubContractorModel" keyProperty="subContractorId">
+    insert into sub_contractor (sub_contractor_id, sub_contractor_name, create_user_id, create_time, last_modify_time)
+    values (#{subContractorId,jdbcType=INTEGER},
+            #{subContractorName,jdbcType=VARCHAR},
+            #{createUserId,jdbcType=INTEGER},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{lastModifyTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lbb.model.SubContractorModel" useGeneratedKeys="true" keyProperty="subContractorId">
+    insert into sub_contractor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subContractorId != null" >
+        sub_contractor_id,
+      </if>
+      <if test="subContractorName != null" >
+        sub_contractor_name,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subContractorId != null" >
+        #{subContractorId,jdbcType=INTEGER},
+      </if>
+      <if test="subContractorName != null" >
+        #{subContractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.SubContractorModel" >
+    update sub_contractor
+    <set >
+      <if test="subContractorName != null" >
+        sub_contractor_name = #{subContractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sub_contractor_id = #{subContractorId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lbb.model.SubContractorModel" >
+    update sub_contractor
+    set sub_contractor_name = #{subContractorName,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where sub_contractor_id = #{subContractorId,jdbcType=INTEGER}
+  </update>
+</mapper>

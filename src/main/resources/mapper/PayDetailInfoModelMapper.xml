@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lbb.dao.PayDetailInfoModelMapper" >
+  <resultMap id="BaseResultMap" type="com.lbb.model.PayDetailInfoModel" >
+    <id column="pay_detail_id" property="payDetailId" jdbcType="BIGINT" />
+    <result column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER" />
+    <result column="share_rate" property="shareRate" jdbcType="DECIMAL" />
+    <result column="share_amount" property="shareAmount" jdbcType="DECIMAL" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pay_detail_id, pay_id, contract_id, sub_contractor_id, share_rate, share_amount, create_user_id,
+    create_time, last_modify_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List"/>
+    from pay_detail_info
+    where pay_detail_id = #{payDetailId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectContractIdListBySubContractorId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select distinct contract_id
+    from pay_detail_info
+    where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListByPayId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from pay_detail_info
+    where pay_id = #{payId, jdbcType=BIGINT}
+  </select>
+
+  <select id="selectListBySubContractorId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from pay_detail_info
+    where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectListByPayIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from pay_detail_info 
+    where pay_id in 
+    <foreach collection="payIdList" item="payId" open="(" separator="," close=")">
+      #{payId,jdbcType=BIGINT}
+    </foreach>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete
+    from pay_detail_info
+    where pay_detail_id = #{payDetailId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByPayId" parameterType="java.lang.Long">
+    delete
+    from pay_detail_info
+    where pay_id = #{payId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.lbb.model.PayDetailInfoModel" >
+    insert into pay_detail_info (pay_detail_id, pay_id, contract_id, sub_contractor_id,
+      share_rate, share_amount,
+      create_user_id, create_time, last_modify_time
+      )
+    values (#{payDetailId,jdbcType=BIGINT}, #{payId,jdbcType=BIGINT}, #{contractId,jdbcType=INTEGER},#{subContractorId,jdbcType=INTEGER},
+      #{shareRate,jdbcType=DECIMAL}, #{shareAmount,jdbcType=DECIMAL},
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lbb.model.PayDetailInfoModel" >
+    insert into pay_detail_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payDetailId != null" >
+        pay_detail_id,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="subContractorId != null" >
+        sub_contractor_id,
+      </if>
+      <if test="shareRate != null" >
+        share_rate,
+      </if>
+      <if test="shareAmount != null" >
+        share_amount,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payDetailId != null" >
+        #{payDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="subContractorId != null" >
+        #{subContractorId,jdbcType=INTEGER},
+      </if>
+      <if test="shareRate != null" >
+        #{shareRate,jdbcType=DECIMAL},
+      </if>
+      <if test="shareAmount != null" >
+        #{shareAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.PayDetailInfoModel" >
+    update pay_detail_info
+    <set >
+      <if test="payId != null" >
+        pay_id = #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="subContractorId != null" >
+        sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+      </if>
+      <if test="shareRate != null" >
+        share_rate = #{shareRate,jdbcType=DECIMAL},
+      </if>
+      <if test="shareAmount != null" >
+        share_amount = #{shareAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pay_detail_id = #{payDetailId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.lbb.model.PayDetailInfoModel" >
+    update pay_detail_info
+    set pay_id = #{payId,jdbcType=BIGINT},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+      share_rate = #{shareRate,jdbcType=DECIMAL},
+      share_amount = #{shareAmount,jdbcType=DECIMAL},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where pay_detail_id = #{payDetailId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lbb.dao.InvoiceDetailInfoModelMapper" >
+  <resultMap id="BaseResultMap" type="com.lbb.model.InvoiceDetailInfoModel" >
+    <id column="invoice_detail_id" property="invoiceDetailId" jdbcType="BIGINT" />
+    <result column="invoice_id" property="invoiceId" jdbcType="BIGINT" />
+    <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER" />
+    <result column="share_rate" property="shareRate" jdbcType="DECIMAL" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="share_amount" property="shareAmount" jdbcType="DECIMAL" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    invoice_detail_id, invoice_id, sub_contractor_id, share_rate, contract_id, share_amount, 
+    create_user_id, create_time, last_modify_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from invoice_detail_info
+    where invoice_detail_id = #{invoiceDetailId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectContractIdListBySubContractorId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select distinct contract_id
+    from invoice_detail_info
+    where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListByInvoiceId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from invoice_detail_info
+    where invoice_id = #{invoiceId, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListBySubContractorId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from invoice_detail_info
+    where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from invoice_detail_info
+    where invoice_detail_id = #{invoiceDetailId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByInvoiceId" parameterType="java.lang.Long">
+    delete from invoice_detail_info
+    where invoice_id = #{invoiceId, jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.lbb.model.InvoiceDetailInfoModel" >
+    insert into invoice_detail_info (invoice_detail_id, invoice_id, sub_contractor_id, 
+      share_rate, contract_id, share_amount, 
+      create_user_id, create_time, last_modify_time
+      )
+    values (#{invoiceDetailId,jdbcType=BIGINT}, #{invoiceId,jdbcType=BIGINT}, #{subContractorId,jdbcType=INTEGER}, 
+      #{shareRate,jdbcType=DECIMAL}, #{contractId,jdbcType=INTEGER}, #{shareAmount,jdbcType=DECIMAL}, 
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lbb.model.InvoiceDetailInfoModel" >
+    insert into invoice_detail_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="invoiceDetailId != null" >
+        invoice_detail_id,
+      </if>
+      <if test="invoiceId != null" >
+        invoice_id,
+      </if>
+      <if test="subContractorId != null" >
+        sub_contractor_id,
+      </if>
+      <if test="shareRate != null" >
+        share_rate,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="shareAmount != null" >
+        share_amount,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="invoiceDetailId != null" >
+        #{invoiceDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="invoiceId != null" >
+        #{invoiceId,jdbcType=BIGINT},
+      </if>
+      <if test="subContractorId != null" >
+        #{subContractorId,jdbcType=INTEGER},
+      </if>
+      <if test="shareRate != null" >
+        #{shareRate,jdbcType=DECIMAL},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="shareAmount != null" >
+        #{shareAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.InvoiceDetailInfoModel" >
+    update invoice_detail_info
+    <set >
+      <if test="invoiceId != null" >
+        invoice_id = #{invoiceId,jdbcType=BIGINT},
+      </if>
+      <if test="subContractorId != null" >
+        sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+      </if>
+      <if test="shareRate != null" >
+        share_rate = #{shareRate,jdbcType=DECIMAL},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="shareAmount != null" >
+        share_amount = #{shareAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where invoice_detail_id = #{invoiceDetailId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lbb.model.InvoiceDetailInfoModel" >
+    update invoice_detail_info
+    set invoice_id = #{invoiceId,jdbcType=BIGINT},
+      sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+      share_rate = #{shareRate,jdbcType=DECIMAL},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      share_amount = #{shareAmount,jdbcType=DECIMAL},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where invoice_detail_id = #{invoiceDetailId,jdbcType=BIGINT}
+  </update>
+</mapper>

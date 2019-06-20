@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: ff_project
+  datasource:
+    url: jdbc:mysql://localhost:3306/ff_project?useUnicode=true&characterEncoding=utf8&useSSL=true
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    username: root
+  redis:
+    port: 6379
+    host: 118.24.89.187
+    password: root
+#  mvc:
+#    servlet:
+#      path: /api
+
+
+server:
+  port: 8080
+
+
+logging:
+  config: classpath:logback.xml
+
+
+mybatis:
+  type-aliases-package: com.lbb.bean.model
+  mapper-locations: classpath:mapper/*.xml
+
+
+pagehelper:
+  helper-dialect: mysql

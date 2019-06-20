@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lbb.dao.ContractModelMapper" >
+  <resultMap id="BaseResultMap" type="com.lbb.model.ContractModel" >
+    <id column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="contract_num" property="contractNum" jdbcType="VARCHAR" />
+    <result column="contract_name" property="contractName" jdbcType="VARCHAR" />
+    <result column="contract_desc" property="contractDesc" jdbcType="VARCHAR" />
+    <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    contract_id, contract_num, contract_name, contract_desc, tax_rate, create_user_id,
+    create_time, last_modify_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from contract
+    where contract_id = #{contractId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectListByNameAndNum" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from contract
+    where contract_num like concat('%', #{contractNum}, '%')
+    and contract_name like concat('%', #{contractName}, '%')
+    order by create_time desc
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from contract
+  </select>
+
+  <select id="selectContractIdListByContractNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select contract_id
+    from contract
+    where contract_num like concat('%', #{contractNum, jdbcType=VARCHAR}, '%')
+  </select>
+
+  <select id="selectListByContractNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from contract
+    where contract_num = #{contractNum, jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectListByContractName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from contract
+    where contract_name = #{contractName, jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete
+    from contract
+    where contract_id = #{contractId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.lbb.model.ContractModel" >
+    insert into contract (contract_id, contract_num, contract_name, 
+      contract_desc, tax_rate,
+      create_user_id, create_time, last_modify_time
+      )
+    values (#{contractId,jdbcType=INTEGER}, #{contractNum,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, 
+      #{contractDesc,jdbcType=VARCHAR}, #{taxRate,jdbcType=DECIMAL},
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lbb.model.ContractModel" useGeneratedKeys="true" keyProperty="contractId">
+    insert into contract
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="contractNum != null" >
+        contract_num,
+      </if>
+      <if test="contractName != null" >
+        contract_name,
+      </if>
+      <if test="contractDesc != null" >
+        contract_desc,
+      </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="contractNum != null" >
+        #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDesc != null" >
+        #{contractDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.ContractModel">
+    update contract
+    <set >
+      <if test="contractNum != null" >
+        contract_num = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        contract_name = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDesc != null" >
+        contract_desc = #{contractDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where contract_id = #{contractId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lbb.model.ContractModel" >
+    update contract
+    set contract_num = #{contractNum,jdbcType=VARCHAR},
+      contract_name = #{contractName,jdbcType=VARCHAR},
+      contract_desc = #{contractDesc,jdbcType=VARCHAR},
+      tax_rate = #{taxRate,jdbcType=DECIMAL},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where contract_id = #{contractId,jdbcType=INTEGER}
+  </update>
+</mapper>

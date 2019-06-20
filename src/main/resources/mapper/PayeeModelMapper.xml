@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lbb.dao.PayeeModelMapper" >
+  <resultMap id="BaseResultMap" type="com.lbb.model.PayeeModel">
+    <id column="payee_id" property="payeeId" jdbcType="INTEGER"/>
+    <result column="payee_name" property="payeeName" jdbcType="VARCHAR"/>
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    payee_id, payee_name, create_user_id, create_time, last_modify_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from payee
+    where payee_id = #{payeeId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPayeeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from payee
+    where payee_name = #{payeeName, jdbcType=VARCHAR}
+    limit 1
+  </select>
+
+  <select id="selectListByPayeeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from payee
+    where payee_name like concat('%', #{payeeName, jdbcType=VARCHAR},'%')
+  </select>
+
+  <select id="selectListByPayeeIdList" parameterType="java.util.List" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from payee
+    where
+    <if test="payeeIdList == null or payeeIdList.isEmpty()">
+      1 = -1 and
+    </if>
+    payee_id in
+    <foreach collection="payeeIdList" item="payeeId" open="(" close=")" separator=",">
+      #{payeeId, jdbcType=INTEGER}
+    </foreach>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete
+    from payee
+    where payee_id = #{payeeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lbb.model.PayeeModel">
+    insert into payee (payee_id, payee_name, create_user_id, create_time, last_modify_time)
+    values (#{payeeId,jdbcType=INTEGER},
+            #{payeeName,jdbcType=VARCHAR},
+            #{createUserId,jdbcType=INTEGER},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{lastModifyTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lbb.model.PayeeModel" useGeneratedKeys="true" keyProperty="payeeId">
+    insert into payee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payeeId != null" >
+        payee_id,
+      </if>
+      <if test="payeeName != null" >
+        payee_name,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payeeId != null" >
+        #{payeeId,jdbcType=INTEGER},
+      </if>
+      <if test="payeeName != null" >
+        #{payeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.PayeeModel" >
+    update payee
+    <set >
+      <if test="payeeName != null" >
+        payee_name = #{payeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where payee_id = #{payeeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lbb.model.PayeeModel" >
+    update payee
+    set payee_name = #{payeeName,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where payee_id = #{payeeId,jdbcType=INTEGER}
+  </update>
+</mapper>
