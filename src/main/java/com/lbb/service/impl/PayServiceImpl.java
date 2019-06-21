@@ -22,10 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PayServiceImpl implements PayService {
@@ -129,33 +127,24 @@ public class PayServiceImpl implements PayService {
         List<PayInfoModel> payInfoModelList = payInfoModelMapper.selectListByParams(searchContractIdList, req.getPayee(), req.getPayType(), req.getPayStartTime(), req.getPayEndTime());
         if (CollectionUtils.isNotEmpty(payInfoModelList)) {
             payInfoModelList.forEach(payInfoModel -> {
-                List<PayDetailInfoVO> payDetailInfoVOList = new ArrayList<>();
-                for (int i = 0; i < 7; i++) {
-                    payDetailInfoVOList.add(null);
-                }
-
-                List<ContractSubContractorRelationModel> relationModelList = contractSubContractorRelationModelMapper.selectListByContractId(payInfoModel.getContractId());
+                PayInfoVO payInfoVO = BeanUtils.convert(payInfoModel, PayInfoVO.class);
 
                 List<PayDetailInfoModel> payDetailInfoModelList = payDetailInfoModelMapper.selectListByPayId(payInfoModel.getPayId());
-                if (CollectionUtils.isNotEmpty(payDetailInfoModelList)) {
-                    payDetailInfoModelList.forEach(payDetailInfoModel -> {
-                        PayDetailInfoVO payDetailInfoVO = BeanUtils.convert(payDetailInfoModel, PayDetailInfoVO.class);
+                List<PayDetailInfoVO> payDetailInfoVOList = payDetailInfoModelList.parallelStream()
+                        .map(payDetailInfoModel -> {
+                            PayDetailInfoVO payDetailInfoVO = BeanUtils.convert(payDetailInfoModel, PayDetailInfoVO.class);
 
-                        // 设置分包名称
-                        SubContractorModel subContractorModel = subContractorModelMapper.selectByPrimaryKey(payDetailInfoModel.getSubContractorId());
-                        if (subContractorModel != null) {
-                            payDetailInfoVO.setSubContractorName(subContractorModel.getSubContractorName());
-                        }
+                            // 设置分包名称
+                            SubContractorModel subContractorModel = subContractorModelMapper.selectByPrimaryKey(payDetailInfoModel.getSubContractorId());
+                            if (subContractorModel != null) {
+                                payDetailInfoVO.setSubContractorName(subContractorModel.getSubContractorName());
+                            }
 
-                        // 设置idx
-                        relationModelList.parallelStream()
-                                .filter(item -> item.getSubContractorId().equals(payDetailInfoModel.getSubContractorId()))
-                                .findFirst()
-                                .ifPresent(item -> payDetailInfoVOList.set(payDetailInfoVO.getSubContractorId() - 1, payDetailInfoVO));
-                    });
-                }
+                            return payDetailInfoVO;
+                        })
+                        .sorted(Comparator.comparingInt(PayDetailInfoVO::getSubContractorId))
+                        .collect(Collectors.toList());
 
-                PayInfoVO payInfoVO = BeanUtils.convert(payInfoModel, PayInfoVO.class);
                 payInfoVO.setPayDetailInfoList(payDetailInfoVOList);
 
                 ContractModel contractModel = contractModelMapper.selectByPrimaryKey(payInfoModel.getContractId());

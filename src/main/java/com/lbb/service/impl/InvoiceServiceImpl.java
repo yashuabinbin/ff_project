@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.ROUND_HALF_DOWN;
 
@@ -78,21 +79,20 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<InvoiceInfoModel> invoiceInfoModelList = invoiceInfoModelMapper.selectListByParams(searchContractIdList, req.getInvoiceStartTime(), req.getInvoiceEndTime());
         if (CollectionUtils.isNotEmpty(invoiceInfoModelList)) {
             invoiceInfoModelList.forEach(invoiceInfoModel -> {
-                List<InvoiceDetailInfoVO> invoiceDetailInfoVOList = new ArrayList<>();
+                InvoiceInfoVO invoiceInfoVO = BeanUtils.convert(invoiceInfoModel, InvoiceInfoVO.class);
 
                 List<InvoiceDetailInfoModel> invoiceDetailInfoModelList = invoiceDetailInfoModelMapper.selectListByInvoiceId(invoiceInfoModel.getInvoiceId());
-                if (CollectionUtils.isNotEmpty(invoiceDetailInfoModelList)) {
-                    invoiceDetailInfoModelList.forEach(invoiceDetailInfoModel -> {
-                        InvoiceDetailInfoVO invoiceDetailInfoVO = BeanUtils.convert(invoiceDetailInfoModel, InvoiceDetailInfoVO.class);
-                        SubContractorModel subContractorModel = subContractorModelMapper.selectByPrimaryKey(invoiceDetailInfoModel.getSubContractorId());
-                        if (subContractorModel != null) {
-                            invoiceDetailInfoVO.setSubContractorName(subContractorModel.getSubContractorName());
-                        }
-
-                        invoiceDetailInfoVOList.add(invoiceDetailInfoVO);
-                    });
-                }
-                InvoiceInfoVO invoiceInfoVO = BeanUtils.convert(invoiceInfoModel, InvoiceInfoVO.class);
+                List<InvoiceDetailInfoVO> invoiceDetailInfoVOList = invoiceDetailInfoModelList.parallelStream()
+                        .map(invoiceDetailInfoModel -> {
+                            InvoiceDetailInfoVO invoiceDetailInfoVO = BeanUtils.convert(invoiceDetailInfoModel, InvoiceDetailInfoVO.class);
+                            SubContractorModel subContractorModel = subContractorModelMapper.selectByPrimaryKey(invoiceDetailInfoModel.getSubContractorId());
+                            if (subContractorModel != null) {
+                                invoiceDetailInfoVO.setSubContractorName(subContractorModel.getSubContractorName());
+                            }
+                            return invoiceDetailInfoVO;
+                        })
+                        .sorted(Comparator.comparingInt(InvoiceDetailInfoVO::getSubContractorId))
+                        .collect(Collectors.toList());
                 invoiceInfoVO.setInvoiceDetailInfoList(invoiceDetailInfoVOList);
 
                 ContractModel contractModel = contractModelMapper.selectByPrimaryKey(invoiceInfoModel.getContractId());
