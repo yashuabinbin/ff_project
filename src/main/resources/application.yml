@@ -8,8 +8,8 @@ spring:
     username: root
   redis:
     port: 6379
-    host: 118.24.89.187
-    password: root
+    host: localhost
+    password:
 #  mvc:
 #    servlet:
 #      path: /api

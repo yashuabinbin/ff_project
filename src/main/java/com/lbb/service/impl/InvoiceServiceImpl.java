@@ -9,14 +9,12 @@ import com.lbb.bean.resp.ApiResp;
 import com.lbb.bean.resp.PageResp;
 import com.lbb.bean.vo.InvoiceDetailInfoVO;
 import com.lbb.bean.vo.InvoiceInfoVO;
+import com.lbb.bean.vo.PayDetailInfoVO;
 import com.lbb.dao.ContractModelMapper;
 import com.lbb.dao.InvoiceDetailInfoModelMapper;
 import com.lbb.dao.InvoiceInfoModelMapper;
 import com.lbb.dao.SubContractorModelMapper;
-import com.lbb.model.ContractModel;
-import com.lbb.model.InvoiceDetailInfoModel;
-import com.lbb.model.InvoiceInfoModel;
-import com.lbb.model.SubContractorModel;
+import com.lbb.model.*;
 import com.lbb.service.InvoiceService;
 import com.lbb.utils.BeanUtils;
 import com.lbb.utils.MyCollectionUtils;
@@ -28,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.math.BigDecimal.ROUND_HALF_DOWN;
 
@@ -108,9 +105,36 @@ public class InvoiceServiceImpl implements InvoiceService {
             });
         }
 
+
+        // 分包平摊总数
+        Map<String, BigDecimal> sumMap = new HashMap<>();
+        for (int i = 0; i < 7; i++) {
+            sumMap.put("subContractor" + i, BigDecimal.ZERO);
+        }
+        sumMap.put("beforeTaxAmount", BigDecimal.ZERO);
+        sumMap.put("deductAmount", BigDecimal.ZERO);
+
+        invoiceInfoModelList = invoiceInfoModelMapper.selectListByParams(searchContractIdList, req.getInvoiceStartTime(), req.getInvoiceEndTime());
+        invoiceInfoModelList.forEach(invoiceInfoModel -> {
+            List<InvoiceDetailInfoModel> invoiceDetailInfoModelList = invoiceDetailInfoModelMapper.selectListByInvoiceId(invoiceInfoModel.getInvoiceId());
+
+            if (CollectionUtils.isNotEmpty(invoiceDetailInfoModelList)) {
+                invoiceDetailInfoModelList.stream()
+                        .sorted(Comparator.comparingInt(InvoiceDetailInfoModel::getSubContractorId))
+                        .forEach(item -> {
+                            String key = "subContractor" + (item.getSubContractorId() - 1);
+                            sumMap.put(key, sumMap.get(key).add(item.getShareAmount()));
+                        });
+            }
+
+            sumMap.put("beforeTaxAmount", sumMap.get("beforeTaxAmount").add(invoiceInfoModel.getBeforeTaxAmount()));
+            sumMap.put("deductAmount", sumMap.get("deductAmount").add(invoiceInfoModel.getDeductAmount()));
+        });
+
         PageResp<InvoiceInfoVO> pageResp = new PageResp<>();
         pageResp.setList(invoiceInfoVOList);
         pageResp.setTotal(page.getTotal());
+        pageResp.setSumMap(sumMap);
         return ApiResp.successWithObj(pageResp);
     }
 
