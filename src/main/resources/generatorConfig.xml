@@ -7,7 +7,7 @@
 
     <!-- 数据库驱动 -->
     <classPathEntry
-            location="/Users/lubingbin/.m2/repository/mysql/mysql-connector-java/8.0.16/mysql-connector-java-8.0.16.jar"/>
+            location="E:\repo\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -53,8 +53,16 @@
         <!--book_info数据库表明--> <!--别名Book_Info pojo（实体类明）-->
 
 
-        <table tableName="sys_user"
-               domainObjectName="SysUserModel"
+        <table tableName="output_value"
+               domainObjectName="OutputValueModel"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="output_value_detail"
+               domainObjectName="OutputValueDetailModel"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"

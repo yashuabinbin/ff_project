@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,7 +88,7 @@ public class PayServiceImpl implements PayService {
                 item.setPayId(payInfoModel.getPayId());
                 item.setContractId(payInfoModel.getContractId());
                 item.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
-                item.setShareAmount(req.getPayAmount().multiply(item.getShareRate()).divide(new BigDecimal("100")));
+                item.setShareAmount(req.getPayAmount().multiply(item.getShareRate()).divide(new BigDecimal("100"), 4, RoundingMode.CEILING));
                 payDetailInfoModelMapper.insertSelective(item);
             });
         }

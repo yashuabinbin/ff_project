@@ -9,12 +9,14 @@ import com.lbb.bean.resp.ApiResp;
 import com.lbb.bean.resp.PageResp;
 import com.lbb.bean.vo.InvoiceDetailInfoVO;
 import com.lbb.bean.vo.InvoiceInfoVO;
-import com.lbb.bean.vo.PayDetailInfoVO;
 import com.lbb.dao.ContractModelMapper;
 import com.lbb.dao.InvoiceDetailInfoModelMapper;
 import com.lbb.dao.InvoiceInfoModelMapper;
 import com.lbb.dao.SubContractorModelMapper;
-import com.lbb.model.*;
+import com.lbb.model.ContractModel;
+import com.lbb.model.InvoiceDetailInfoModel;
+import com.lbb.model.InvoiceInfoModel;
+import com.lbb.model.SubContractorModel;
 import com.lbb.service.InvoiceService;
 import com.lbb.utils.BeanUtils;
 import com.lbb.utils.MyCollectionUtils;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -166,7 +169,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private BigDecimal calculateDeductAmount(BigDecimal beforeTaxAmount, BigDecimal taxRate) {
         BigDecimal bg100 = new BigDecimal("100");
         BigDecimal bg1 = new BigDecimal("1");
-        return beforeTaxAmount.divide(bg1.add(taxRate.divide(bg100, 4, ROUND_HALF_DOWN)), 4, ROUND_HALF_DOWN).multiply(taxRate.divide(bg100, 4, ROUND_HALF_DOWN));
+        return beforeTaxAmount.divide(bg1.add(taxRate.divide(bg100, 4, ROUND_HALF_DOWN)), 4, RoundingMode.CEILING).multiply(taxRate.divide(bg100, 4, RoundingMode.CEILING));
     }
 
     private void saveInvoiceInfoBatch(InvoiceEditAddReq req, InvoiceInfoModel invoiceInfoModel) {
@@ -176,7 +179,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 item.setInvoiceId(invoiceInfoModel.getInvoiceId());
                 item.setContractId(invoiceInfoModel.getContractId());
                 item.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
-                item.setShareAmount(req.getBeforeTaxAmount().multiply(item.getShareRate()).divide(new BigDecimal("100")));
+                item.setShareAmount(req.getBeforeTaxAmount().multiply(item.getShareRate()).divide(new BigDecimal("100"), 4, RoundingMode.CEILING));
                 invoiceDetailInfoModelMapper.insertSelective(item);
             });
         }

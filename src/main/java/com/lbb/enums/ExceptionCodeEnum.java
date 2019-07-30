@@ -21,6 +21,8 @@ public enum ExceptionCodeEnum {
 
     INVOICE_DETAIL_SUB_CONTRACTOR_ID_EXIST("100202", "发票详情存在记录与该分包有关联，无法删除"),
 
+    OUTPUT_VALUE_NOT_EXIST("100300", "该产值不存在")
+
     ;
 
     private String code;
