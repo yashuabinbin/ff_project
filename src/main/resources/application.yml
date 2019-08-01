@@ -2,7 +2,7 @@ spring:
   application:
     name: ff_project
   datasource:
-    url: jdbc:mysql://localhost:3306/ff_project?useUnicode=true&characterEncoding=utf8&useSSL=true
+    url: jdbc:mysql://119.3.167.234:3306/ff_project?useUnicode=true&characterEncoding=utf8&useSSL=true
     driver-class-name: com.mysql.jdbc.Driver
     password: root
     username: root
