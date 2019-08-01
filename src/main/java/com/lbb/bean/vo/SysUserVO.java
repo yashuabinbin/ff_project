@@ -7,6 +7,6 @@ public class SysUserVO {
 
     private Integer userId;
 
-    private String userName;
+    private String username;
 
 }

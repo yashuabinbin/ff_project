@@ -18,4 +18,8 @@ public class ContractModel extends BaseModel {
 
     private BigDecimal taxRate;
 
+    private String companyName;
+
+    private BigDecimal contractAmount;
+
 }

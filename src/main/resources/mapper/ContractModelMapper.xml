@@ -6,6 +6,8 @@
     <result column="contract_num" property="contractNum" jdbcType="VARCHAR" />
     <result column="contract_name" property="contractName" jdbcType="VARCHAR" />
     <result column="contract_desc" property="contractDesc" jdbcType="VARCHAR" />
+    <result column="contract_amount" property="contractAmount" jdbcType="DECIMAL" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
     <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -13,7 +15,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    contract_id, contract_num, contract_name, contract_desc, tax_rate, create_user_id,
+    contract_id, contract_num, contract_name, contract_desc, contract_amount, company_name, tax_rate, create_user_id,
     create_time, last_modify_time
   </sql>
 
@@ -63,11 +65,11 @@
 
   <insert id="insert" parameterType="com.lbb.model.ContractModel" >
     insert into contract (contract_id, contract_num, contract_name, 
-      contract_desc, tax_rate,
+      contract_desc, contract_amount, company_name, tax_rate,
       create_user_id, create_time, last_modify_time
       )
     values (#{contractId,jdbcType=INTEGER}, #{contractNum,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, 
-      #{contractDesc,jdbcType=VARCHAR}, #{taxRate,jdbcType=DECIMAL},
+      #{contractDesc,jdbcType=VARCHAR}, #{contractAmount,jdbcType=DECIMAL}, #{companyName,jdbcType=VARCHAR}, #{taxRate,jdbcType=DECIMAL},
       #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -86,6 +88,12 @@
       </if>
       <if test="contractDesc != null" >
         contract_desc,
+      </if>
+      <if test="contractAmount != null" >
+        contract_amount,
+      </if>
+      <if test="companyName != null" >
+        company_name,
       </if>
       <if test="taxRate != null" >
         tax_rate,
@@ -113,6 +121,12 @@
       <if test="contractDesc != null" >
         #{contractDesc,jdbcType=VARCHAR},
       </if>
+      <if test="contractAmount != null" >
+        #{contractAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
       <if test="taxRate != null" >
         #{taxRate,jdbcType=DECIMAL},
       </if>
@@ -136,8 +150,11 @@
       <if test="contractName != null" >
         contract_name = #{contractName,jdbcType=VARCHAR},
       </if>
-      <if test="contractDesc != null" >
-        contract_desc = #{contractDesc,jdbcType=VARCHAR},
+      <if test="contractAmount != null" >
+        contract_amount = #{contractAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
       </if>
       <if test="taxRate != null" >
         tax_rate = #{taxRate,jdbcType=DECIMAL},
@@ -159,6 +176,8 @@
     set contract_num = #{contractNum,jdbcType=VARCHAR},
       contract_name = #{contractName,jdbcType=VARCHAR},
       contract_desc = #{contractDesc,jdbcType=VARCHAR},
+      contract_amount = #{contractAmount,jdbcType=DECIMAL},
+      company_name = #{companyName,jdbcType=VARCHAR},
       tax_rate = #{taxRate,jdbcType=DECIMAL},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

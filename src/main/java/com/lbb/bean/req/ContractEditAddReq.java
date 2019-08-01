@@ -27,6 +27,12 @@ public class ContractEditAddReq implements Serializable {
     @JsonProperty("contractDesc")
     private String contractDesc;
 
+    @JsonProperty("companyName")
+    private String companyName;
+
+    @JsonProperty("contractAmount")
+    private BigDecimal contractAmount;
+
     @JsonProperty("taxRate")
     private BigDecimal taxRate;
 

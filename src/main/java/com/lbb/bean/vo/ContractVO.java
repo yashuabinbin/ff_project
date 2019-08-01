@@ -26,6 +26,12 @@ public class ContractVO implements Serializable {
     @ApiModelProperty(value = "合同描述")
     private String contractDesc;
 
+    @ApiModelProperty(value = "对方单位")
+    private String companyName;
+
+    @ApiModelProperty(value = "合同金额")
+    private BigDecimal contractAmount;
+
     @ApiModelProperty(value = "税率")
     private BigDecimal taxRate;
 
