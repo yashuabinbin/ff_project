@@ -138,7 +138,7 @@ public class SubContractorServiceImpl implements SubContractorService {
         if (CollectionUtils.isNotEmpty(relationModelList)) {
             relationModelList.forEach(relation -> {
                 SubContractorWithShareRateVO subContractorWithShareRateVO = new SubContractorWithShareRateVO();
-                subContractorWithShareRateVO.setShareRate(relation.getShareRate());
+                subContractorWithShareRateVO.setSubContractorAmount(relation.getSubContractorAmount());
                 subContractorWithShareRateVO.setSubContractorId(relation.getSubContractorId());
                 subContractorModelList.parallelStream()
                         .filter(subContractorModel -> subContractorModel.getSubContractorId().equals(relation.getSubContractorId()))

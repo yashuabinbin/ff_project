@@ -14,6 +14,6 @@ public class SubContractorWithShareRateVO implements Serializable {
 
     private String subContractorName;
 
-    private BigDecimal shareRate;
+    private BigDecimal subContractorAmount;
 
 }

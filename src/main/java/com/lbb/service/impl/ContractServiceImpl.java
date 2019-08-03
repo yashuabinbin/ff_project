@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class ContractServiceImpl implements ContractService {
                             .findFirst()
                             .ifPresent(item -> rateVO.setSubContractorName(item.getSubContractorName()));
                     rateVO.setSubContractorId(relationModel.getSubContractorId());
-                    rateVO.setShareRate(relationModel.getShareRate());
+                    rateVO.setSubContractorAmount(relationModel.getSubContractorAmount());
                     rateVOList.set(relationModel.getSubContractorId() - 1, rateVO);
                 });
                 contractVO.setSubContractorList(rateVOList);
@@ -165,7 +164,7 @@ public class ContractServiceImpl implements ContractService {
         for (SubContractorDTO subContractorDTO : req.getSubContractorList()) {
             ContractSubContractorRelationModel relationModel = new ContractSubContractorRelationModel();
             relationModel.setContractId(contractId);
-            relationModel.setShareRate(subContractorDTO.getShareRate());
+            relationModel.setSubContractorAmount(subContractorDTO.getShareRate());
             relationModel.setSubContractorId(subContractorDTO.getSubContractorId());
             relationModel.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
             contractSubContractorRelationModelMapper.insertSelective(relationModel);

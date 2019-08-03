@@ -1,142 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lbb.dao.ContractSubContractorRelationModelMapper" >
-  <resultMap id="BaseResultMap" type="com.lbb.model.ContractSubContractorRelationModel" >
-    <id column="relation_id" property="relationId" jdbcType="INTEGER" />
-    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
-    <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER" />
-    <result column="share_rate" property="shareRate" jdbcType="DECIMAL" />
-    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    relation_id, contract_id, sub_contractor_id,
-    share_rate, create_user_id, create_time, last_modify_time
-  </sql>
+<mapper namespace="com.lbb.dao.ContractSubContractorRelationModelMapper">
+    <resultMap id="BaseResultMap" type="com.lbb.model.ContractSubContractorRelationModel">
+        <id column="relation_id" property="relationId" jdbcType="INTEGER"/>
+        <result column="contract_id" property="contractId" jdbcType="INTEGER"/>
+        <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER"/>
+        <result column="sub_contractor_amount" property="subContractorAmount" jdbcType="DECIMAL"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from contract_sub_contractor_relation
-    where relation_id = #{relationId,jdbcType=INTEGER}
-  </select>
+    <sql id="Base_Column_List">
+        relation_id, contract_id, sub_contractor_id,
+        sub_contractor_amount, create_user_id, create_time, last_modify_time
+    </sql>
 
-  <select id="selectListByContractId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from contract_sub_contractor_relation
-    where contract_id = #{contractId,jdbcType=INTEGER}
-  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from contract_sub_contractor_relation
+        where relation_id = #{relationId,jdbcType=INTEGER}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectListByContractId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from contract_sub_contractor_relation
+        where contract_id = #{contractId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from contract_sub_contractor_relation
     where relation_id = #{relationId,jdbcType=INTEGER}
   </delete>
 
-  <delete id="deleteByContractId" parameterType="java.lang.Integer">
+    <delete id="deleteByContractId" parameterType="java.lang.Integer">
     delete from contract_sub_contractor_relation
     where contract_id = #{contractId,jdbcType=INTEGER}
   </delete>
 
-  <delete id="deleteBySubContractorId" parameterType="java.lang.Integer">
+    <delete id="deleteBySubContractorId" parameterType="java.lang.Integer">
     delete from contract_sub_contractor_relation
     where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
   </delete>
 
-  <insert id="insert" parameterType="com.lbb.model.ContractSubContractorRelationModel" >
+    <insert id="insert" parameterType="com.lbb.model.ContractSubContractorRelationModel">
     insert into contract_sub_contractor_relation (relation_id, contract_id, sub_contractor_id, idx,
-      create_user_id, create_time, last_modify_time, share_rate
+      create_user_id, create_time, last_modify_time, sub_contractor_amount
       )
     values (#{relationId,jdbcType=INTEGER}, #{contractId,jdbcType=INTEGER}, #{subContractorId,jdbcType=INTEGER},
             #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP},
-            , #{shareRate,jdbcType=DECIMAL}
+            , #{subContractorAmount,jdbcType=DECIMAL}
       )
   </insert>
 
-  <insert id="insertSelective" parameterType="com.lbb.model.ContractSubContractorRelationModel" >
-    insert into contract_sub_contractor_relation
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="relationId != null" >
-        relation_id,
-      </if>
-      <if test="contractId != null" >
-        contract_id,
-      </if>
-      <if test="subContractorId != null" >
-        sub_contractor_id,
-      </if>
-      <if test="createUserId != null" >
-        create_user_id,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="lastModifyTime != null" >
-        last_modify_time,
-      </if>
-      <if test="shareRate != null" >
-        share_rate,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="relationId != null" >
-        #{relationId,jdbcType=INTEGER},
-      </if>
-      <if test="contractId != null" >
-        #{contractId,jdbcType=INTEGER},
-      </if>
-      <if test="subContractorId != null" >
-        #{subContractorId,jdbcType=INTEGER},
-      </if>
-      <if test="createUserId != null" >
-        #{createUserId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="shareRate != null" >
-        #{shareRate,jdbcType=DECIMAL},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insertSelective" parameterType="com.lbb.model.ContractSubContractorRelationModel">
+        insert into contract_sub_contractor_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relationId != null">
+                relation_id,
+            </if>
+            <if test="contractId != null">
+                contract_id,
+            </if>
+            <if test="subContractorId != null">
+                sub_contractor_id,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time,
+            </if>
+            <if test="subContractorAmount != null">
+                sub_contractor_amount,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relationId != null">
+                #{relationId,jdbcType=INTEGER},
+            </if>
+            <if test="contractId != null">
+                #{contractId,jdbcType=INTEGER},
+            </if>
+            <if test="subContractorId != null">
+                #{subContractorId,jdbcType=INTEGER},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="subContractorAmount != null">
+                #{subContractorAmount,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.ContractSubContractorRelationModel" >
-    update contract_sub_contractor_relation
-    <set >
-      <if test="contractId != null" >
-        contract_id = #{contractId,jdbcType=INTEGER},
-      </if>
-      <if test="subContractorId != null" >
-        sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
-      </if>
-      <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="shareRate != null" >
-        share_rate = #{shareRate,jdbcType=DECIMAL},
-      </if>
-    </set>
-    where relation_id = #{relationId,jdbcType=INTEGER}
-  </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.ContractSubContractorRelationModel">
+        update contract_sub_contractor_relation
+        <set>
+            <if test="contractId != null">
+                contract_id = #{contractId,jdbcType=INTEGER},
+            </if>
+            <if test="subContractorId != null">
+                sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="subContractorAmount != null">
+                sub_contractor_amount = #{subContractorAmount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where relation_id = #{relationId,jdbcType=INTEGER}
+    </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.lbb.model.ContractSubContractorRelationModel" >
-    update contract_sub_contractor_relation
-    set contract_id = #{contractId,jdbcType=INTEGER},
-      sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
-      create_user_id = #{createUserId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
-      share_rate = #{shareRate,jdbcType=DECIMAL}
-    where relation_id = #{relationId,jdbcType=INTEGER}
-  </update>
+    <update id="updateByPrimaryKey" parameterType="com.lbb.model.ContractSubContractorRelationModel">
+        update contract_sub_contractor_relation
+        set contract_id = #{contractId,jdbcType=INTEGER},
+          sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+          create_user_id = #{createUserId,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+          sub_contractor_amount = #{subContractorAmount,jdbcType=DECIMAL}
+        where relation_id = #{relationId,jdbcType=INTEGER}
+    </update>
 </mapper>

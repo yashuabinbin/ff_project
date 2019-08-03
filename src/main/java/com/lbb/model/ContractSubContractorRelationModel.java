@@ -13,6 +13,6 @@ public class ContractSubContractorRelationModel extends BaseModel {
 
     private Integer subContractorId;
 
-    private BigDecimal shareRate;
+    private BigDecimal subContractorAmount;
 
 }
