@@ -45,6 +45,13 @@
     where contract_num like concat('%', #{contractNum, jdbcType=VARCHAR}, '%')
   </select>
 
+  <select id="selectContractorIdListByParams" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select distinct contract_id
+    from contract
+    where contract_num like concat('%', #{contractNum}, '%')
+    and contract_name like concat('%', #{contractName}, '%')
+  </select>
+
   <select id="selectListByContractNum" parameterType="java.lang.String" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from contract
@@ -55,6 +62,15 @@
     select <include refid="Base_Column_List"/>
     from contract
     where contract_name = #{contractName, jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectContractAmountSum" parameterType="java.util.List" resultType="java.math.BigDecimal">
+    select ifnull(sum(contract_amount), 0)
+    from contract
+    where contract_id in
+    <foreach collection="contractIdList" item="contractId" open="(" separator="," close=")">
+      #{contractId, jdbcType=INTEGER}
+    </foreach>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -141,6 +157,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.ContractModel">
     update contract
     <set >
@@ -171,6 +188,7 @@
     </set>
     where contract_id = #{contractId,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.lbb.model.ContractModel" >
     update contract
     set contract_num = #{contractNum,jdbcType=VARCHAR},

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -31,4 +32,8 @@ public interface ContractModelMapper {
     List<ContractModel> selectListByContractNum(@Param("contractNum") String contractNum);
 
     List<ContractModel> selectListByContractName(@Param("contractName")String contractName);
+
+    List<Integer> selectContractorIdListByParams(@Param("contractName") String contractName, @Param("contractNum") String contractNum);
+
+    BigDecimal selectContractAmountSum(@Param("contractIdList") List<Integer> contractIdList);
 }

@@ -17,8 +17,6 @@ public class PayDetailInfoModel extends BaseModel {
 
     private Integer subContractorId;
 
-    private BigDecimal shareRate;
-
-    private BigDecimal shareAmount;
+    private BigDecimal subContractorAmount;
 
 }

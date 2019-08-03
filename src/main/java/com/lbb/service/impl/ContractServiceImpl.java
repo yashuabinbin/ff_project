@@ -23,8 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -82,9 +85,20 @@ public class ContractServiceImpl implements ContractService {
             });
         }
 
+        Map<String, BigDecimal> sumMap = new HashMap<>();
+        List<Integer> contractIdList = this.contractModelMapper.selectContractorIdListByParams(req.getContractName(), req.getContractNum());
+        List<BigDecimal> subContractorAmountSumList = this.contractSubContractorRelationModelMapper.selectSubContractorAmountSum(contractIdList);
+        for (int i = 1; i <= 7; i++) {
+            sumMap.put("subContractor" + i, subContractorAmountSumList.get(i - 1));
+        }
+
+        BigDecimal contractAmountSum = this.contractModelMapper.selectContractAmountSum(contractIdList);
+        sumMap.put("contractAmount", contractAmountSum);
+
         PageResp<ContractVO> pageResp = new PageResp<>();
         pageResp.setList(contractVOList);
         pageResp.setTotal(page.getTotal());
+        pageResp.setSumMap(sumMap);
         return ApiResp.successWithObj(pageResp);
     }
 

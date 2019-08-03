@@ -4,6 +4,7 @@ import com.lbb.model.ContractSubContractorRelationModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -26,4 +27,6 @@ public interface ContractSubContractorRelationModelMapper {
     void deleteByContractId(@Param("contractId") Integer contractId);
 
     void deleteBySubContractorId(@Param("subContractorId") Integer subContractorId);
+
+    List<BigDecimal> selectSubContractorAmountSum(@Param("contractIdList") List<Integer> contractIdList);
 }

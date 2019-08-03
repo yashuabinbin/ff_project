@@ -19,9 +19,6 @@ public class PayInfoListReq extends PageReq implements Serializable {
     @JsonProperty("payee")
     private String payee;
 
-    @JsonProperty("subContractorId")
-    private Integer subContractorId;
-
     @JsonProperty("payStartTime")
     private Date payStartTime;
 

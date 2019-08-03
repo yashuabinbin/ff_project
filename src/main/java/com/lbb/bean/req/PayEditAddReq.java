@@ -35,10 +35,10 @@ public class PayEditAddReq implements Serializable {
     private Date payTime;
 
     @JsonProperty("payAmount")
-    private BigDecimal payAmount;
+    private BigDecimal payAmount = BigDecimal.ZERO;
 
     @JsonProperty("performanceBoundAmount")
-    private BigDecimal performanceBoundAmount;
+    private BigDecimal performanceBoundAmount = BigDecimal.ZERO;
 
     @JsonProperty("payDetailInfoList")
     private List<PayDetailInfoDTO> payDetailInfoList;

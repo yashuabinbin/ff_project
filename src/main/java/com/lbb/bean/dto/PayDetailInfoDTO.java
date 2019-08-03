@@ -15,6 +15,6 @@ public class PayDetailInfoDTO implements Serializable {
     private Integer subContractorId;
 
     @JsonProperty("subContractorAmount")
-    private BigDecimal shareRate;
+    private BigDecimal subContractorAmount = BigDecimal.ZERO;
 
 }

@@ -11,8 +11,6 @@ public class PayDetailInfoVO {
 
     private String subContractorName;
 
-    private BigDecimal shareRate;
-
-    private BigDecimal shareAmount;
+    private BigDecimal subContractorAmount;
 
 }

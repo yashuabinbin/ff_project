@@ -16,9 +16,6 @@ public class InvoiceInfoListReq extends PageReq implements Serializable {
     @JsonProperty("contractNum")
     private String contractNum;
 
-    @JsonProperty("subContractorId")
-    private Integer subContractorId;
-
     @JsonProperty("invoiceStartTime")
     private Date invoiceStartTime;
 

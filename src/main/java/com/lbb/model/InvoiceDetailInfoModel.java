@@ -13,11 +13,9 @@ public class InvoiceDetailInfoModel extends BaseModel {
 
     private Integer subContractorId;
 
-    private BigDecimal shareRate;
+    private BigDecimal subContractorAmount;
 
     private Integer contractId;
-
-    private BigDecimal shareAmount;
 
     private Integer createUserId;
 

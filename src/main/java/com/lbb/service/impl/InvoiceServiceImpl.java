@@ -51,29 +51,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ApiResp invoiceInfoList(InvoiceInfoListReq req) {
-        List<Integer> contractNumSearchContractIdList = null;
-        List<Integer> subContractorSearchContractIdList = null;
         List<Integer> searchContractIdList = null;
         if (StringUtils.isNotBlank(req.getContractNum())) {
-            contractNumSearchContractIdList = contractModelMapper.selectContractIdListByContractNum(req.getContractNum());
-        }
-
-        if (req.getSubContractorId() != null) {
-            subContractorSearchContractIdList = invoiceDetailInfoModelMapper.selectContractIdListBySubContractorId(req.getSubContractorId());
-        }
-
-        if (contractNumSearchContractIdList != null && subContractorSearchContractIdList != null) {
-            searchContractIdList = MyCollectionUtils.intersection(contractNumSearchContractIdList, subContractorSearchContractIdList);
-        } else {
-            if (contractNumSearchContractIdList != null) {
-                searchContractIdList = contractNumSearchContractIdList;
-            } else {
-                searchContractIdList = subContractorSearchContractIdList;
+            searchContractIdList = contractModelMapper.selectContractIdListByContractNum(req.getContractNum());
+            if (CollectionUtils.isEmpty(searchContractIdList)) {
+                return ApiResp.successWithObj(new PageResp<>(new ArrayList<>(), 0L));
             }
-        }
-
-        if (searchContractIdList != null && searchContractIdList.size() == 0) {
-            return ApiResp.successWithObj(new PageResp<>(new ArrayList<>(), 0L));
         }
 
         List<InvoiceInfoVO> invoiceInfoVOList = new ArrayList<>();
@@ -111,7 +94,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // 分包平摊总数
         Map<String, BigDecimal> sumMap = new HashMap<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 1; i <= 7; i++) {
             sumMap.put("subContractor" + i, BigDecimal.ZERO);
         }
         sumMap.put("beforeTaxAmount", BigDecimal.ZERO);
@@ -125,8 +108,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoiceDetailInfoModelList.stream()
                         .sorted(Comparator.comparingInt(InvoiceDetailInfoModel::getSubContractorId))
                         .forEach(item -> {
-                            String key = "subContractor" + (item.getSubContractorId() - 1);
-                            sumMap.put(key, sumMap.get(key).add(item.getShareAmount()));
+                            String key = "subContractor" + item.getSubContractorId();
+                            sumMap.put(key, sumMap.get(key).add(item.getSubContractorAmount()));
                         });
             }
 
@@ -179,7 +162,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 item.setInvoiceId(invoiceInfoModel.getInvoiceId());
                 item.setContractId(invoiceInfoModel.getContractId());
                 item.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
-                item.setShareAmount(req.getBeforeTaxAmount().multiply(item.getShareRate()).divide(new BigDecimal("100"), 4, RoundingMode.CEILING));
+                item.setSubContractorAmount(item.getSubContractorAmount());
                 invoiceDetailInfoModelMapper.insertSelective(item);
             });
         }

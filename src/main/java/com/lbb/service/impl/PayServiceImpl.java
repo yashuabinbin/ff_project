@@ -88,7 +88,7 @@ public class PayServiceImpl implements PayService {
                 item.setPayId(payInfoModel.getPayId());
                 item.setContractId(payInfoModel.getContractId());
                 item.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
-                item.setShareAmount(req.getPayAmount().multiply(item.getShareRate()).divide(new BigDecimal("100"), 4, RoundingMode.CEILING));
+                item.setSubContractorAmount(item.getSubContractorAmount());
                 payDetailInfoModelMapper.insertSelective(item);
             });
         }
@@ -97,30 +97,14 @@ public class PayServiceImpl implements PayService {
     @Override
     public ApiResp payInfoList(PayInfoListReq req) {
         List<Integer> contractNumSearchContractIdList = null;
-        List<Integer> subContractorSearchContractIdList = null;
         List<Integer> searchContractIdList = null;
         if (StringUtils.isNotBlank(req.getContractNum())) {
             contractNumSearchContractIdList = contractModelMapper.selectContractIdListByContractNum(req.getContractNum());
-        }
 
-        if (req.getSubContractorId() != null) {
-            subContractorSearchContractIdList = payDetailInfoModelMapper.selectContractIdListBySubContractorId(req.getSubContractorId());
-        }
-
-        if (contractNumSearchContractIdList != null && subContractorSearchContractIdList != null) {
-            searchContractIdList = MyCollectionUtils.intersection(contractNumSearchContractIdList, subContractorSearchContractIdList);
-        } else {
-            if (contractNumSearchContractIdList != null) {
-                searchContractIdList = contractNumSearchContractIdList;
-            } else {
-                searchContractIdList = subContractorSearchContractIdList;
+            if (CollectionUtils.isEmpty(contractNumSearchContractIdList)) {
+                return ApiResp.successWithObj(new PageResp<>(new ArrayList<>(), 0L));
             }
         }
-
-        if (searchContractIdList != null && searchContractIdList.size() == 0) {
-            return ApiResp.successWithObj(new PageResp<>(new ArrayList<>(), 0L));
-        }
-
 
         List<PayInfoVO> payInfoVOList = new ArrayList<>();
 
@@ -158,13 +142,12 @@ public class PayServiceImpl implements PayService {
             });
         }
 
-
         // 分包平摊总数
         Map<String, BigDecimal> sumMap = new HashMap<>();
         for (int i = 1; i <= 7; i++) {
             sumMap.put("subContractor" + i, BigDecimal.ZERO);
         }
-        sumMap.put("shareAmount", BigDecimal.ZERO);
+        sumMap.put("payAmount", BigDecimal.ZERO);
         sumMap.put("performanceBoundAmount", BigDecimal.ZERO);
 
         payInfoModelList = payInfoModelMapper.selectListByParams(searchContractIdList, req.getPayee(), req.getPayType(), req.getPayStartTime(), req.getPayEndTime());
@@ -180,14 +163,13 @@ public class PayServiceImpl implements PayService {
                     relationModelList.parallelStream()
                             .filter(item -> item.getSubContractorId().equals(payDetailInfoModel.getSubContractorId()))
                             .findFirst()
-                            .ifPresent(item -> sumMap.put("subContractor" + item.getSubContractorId(), sumMap.get("subContractor" + item.getSubContractorId()).add(payDetailInfoVO.getShareAmount())));
+                            .ifPresent(item -> sumMap.put("subContractor" + item.getSubContractorId(), sumMap.get("subContractor" + item.getSubContractorId()).add(payDetailInfoVO.getSubContractorAmount())));
                 });
             }
 
-            sumMap.put("shareAmount", sumMap.get("shareAmount").add(payInfoModel.getPayAmount()));
+            sumMap.put("payAmount", sumMap.get("payAmount").add(payInfoModel.getPayAmount()));
             sumMap.put("performanceBoundAmount", sumMap.get("performanceBoundAmount").add(payInfoModel.getPerformanceBoundAmount()));
         });
-
 
         PageResp<PayInfoVO> pageResp = new PageResp<>();
         pageResp.setList(payInfoVOList);

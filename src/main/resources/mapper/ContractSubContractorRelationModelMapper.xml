@@ -30,20 +30,31 @@
         where contract_id = #{contractId,jdbcType=INTEGER}
     </select>
 
+    <select id="selectSubContractorAmountSum" parameterType="java.util.List" resultType="java.math.BigDecimal">
+        select sum(sub_contractor_amount)
+        from contract_sub_contractor_relation
+        where contract_id in
+        <foreach collection="contractIdList" item="contractId" open="(" separator="," close=")">
+            #{contractId, jdbcType=INTEGER}
+        </foreach>
+        group by sub_contractor_id
+        order by sub_contractor_id
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from contract_sub_contractor_relation
-    where relation_id = #{relationId,jdbcType=INTEGER}
-  </delete>
+        delete from contract_sub_contractor_relation
+        where relation_id = #{relationId,jdbcType=INTEGER}
+    </delete>
 
     <delete id="deleteByContractId" parameterType="java.lang.Integer">
-    delete from contract_sub_contractor_relation
-    where contract_id = #{contractId,jdbcType=INTEGER}
-  </delete>
+        delete from contract_sub_contractor_relation
+        where contract_id = #{contractId,jdbcType=INTEGER}
+    </delete>
 
     <delete id="deleteBySubContractorId" parameterType="java.lang.Integer">
-    delete from contract_sub_contractor_relation
-    where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
-  </delete>
+        delete from contract_sub_contractor_relation
+        where sub_contractor_id = #{subContractorId, jdbcType=INTEGER}
+    </delete>
 
     <insert id="insert" parameterType="com.lbb.model.ContractSubContractorRelationModel">
     insert into contract_sub_contractor_relation (relation_id, contract_id, sub_contractor_id, idx,

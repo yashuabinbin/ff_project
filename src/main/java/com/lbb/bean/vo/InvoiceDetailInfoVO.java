@@ -16,7 +16,6 @@ public class InvoiceDetailInfoVO implements Serializable {
 
     private String subContractorName;
 
-    private BigDecimal shareRate;
+    private BigDecimal subContractorAmount;
 
-    private BigDecimal shareAmount;
 }
