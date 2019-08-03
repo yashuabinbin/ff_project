@@ -19,7 +19,6 @@ import com.lbb.model.InvoiceInfoModel;
 import com.lbb.model.SubContractorModel;
 import com.lbb.service.InvoiceService;
 import com.lbb.utils.BeanUtils;
-import com.lbb.utils.MyCollectionUtils;
 import com.lbb.utils.TokenHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +94,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         // 分包平摊总数
         Map<String, BigDecimal> sumMap = new HashMap<>();
         for (int i = 1; i <= 7; i++) {
-            sumMap.put("subContractor" + i, BigDecimal.ZERO);
+            sumMap.put("subContractorDeduct" + i, BigDecimal.ZERO);
         }
         sumMap.put("beforeTaxAmount", BigDecimal.ZERO);
         sumMap.put("deductAmount", BigDecimal.ZERO);
@@ -108,8 +107,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoiceDetailInfoModelList.stream()
                         .sorted(Comparator.comparingInt(InvoiceDetailInfoModel::getSubContractorId))
                         .forEach(item -> {
-                            String key = "subContractor" + item.getSubContractorId();
-                            sumMap.put(key, sumMap.get(key).add(item.getSubContractorAmount()));
+                            String key = "subContractorDeduct" + item.getSubContractorId();
+                            sumMap.put(key, sumMap.get(key).add(item.getSubContractorDeductAmount()));
                         });
             }
 
@@ -162,7 +161,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 item.setInvoiceId(invoiceInfoModel.getInvoiceId());
                 item.setContractId(invoiceInfoModel.getContractId());
                 item.setCreateUserId(TokenHelper.getCurrentUser().getUserId());
-                item.setSubContractorAmount(item.getSubContractorAmount());
+                item.setSubContractorDeductAmount(item.getSubContractorDeductAmount());
                 invoiceDetailInfoModelMapper.insertSelective(item);
             });
         }

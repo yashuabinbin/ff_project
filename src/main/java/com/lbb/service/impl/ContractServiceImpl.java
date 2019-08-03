@@ -202,7 +202,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public ApiResp contractListAll() {
+    public ApiResp  contractListAll() {
         List<ContractModel> contractModelList = contractModelMapper.selectAll();
         List<ContractVO> contractVOList = BeanUtils.convertList(contractModelList, ContractVO.class);
         return ApiResp.successWithObj(contractVOList);

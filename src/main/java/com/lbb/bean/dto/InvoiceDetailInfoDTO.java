@@ -14,7 +14,7 @@ public class InvoiceDetailInfoDTO implements Serializable {
     @JsonProperty("subContractorId")
     private Integer subContractorId;
 
-    @JsonProperty("subContractorAmount")
-    private BigDecimal subContractorAmount;
+    @JsonProperty("subContractorDeductAmount")
+    private BigDecimal subContractorDeductAmount;
 
 }

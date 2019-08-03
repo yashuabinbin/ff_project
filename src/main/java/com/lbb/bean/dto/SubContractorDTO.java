@@ -16,7 +16,7 @@ public class SubContractorDTO implements Serializable {
     @JsonProperty("subContractorId")
     private Integer subContractorId;
 
-    @JsonProperty("subContractorAmount")
+    @JsonProperty("shareRate")
     private BigDecimal shareRate;
 
 }

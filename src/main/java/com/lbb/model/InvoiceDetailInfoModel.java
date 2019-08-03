@@ -13,7 +13,7 @@ public class InvoiceDetailInfoModel extends BaseModel {
 
     private Integer subContractorId;
 
-    private BigDecimal subContractorAmount;
+    private BigDecimal subContractorDeductAmount;
 
     private Integer contractId;
 
