@@ -1,24 +1,24 @@
 package com.lbb.bean.vo;
 
+import com.lbb.model.OutputValueDetailModel;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class OutputValueVO implements Serializable {
+public class OutputValueVO {
 
     private Long outputValueId;
 
-    private BigDecimal subContractorAmount;
+    private Integer outputTime;
 
-    private BigDecimal migrantWorkAmount;
+    private Date createTime;
 
-    private Date outputTime;
+    private Integer createUserId;
 
-    private String remark;
+    private Date lastModifyTime;
 
-    private List<OutputValueDetailVO> outputValueDetailList;
+    private List<OutputValueDetailVO> outputValueDetailVOList;
+
 }

@@ -8,10 +8,13 @@ import java.math.BigDecimal;
 @Data
 public class OutputValueDetailDTO {
 
-    @JsonProperty("subContractorId")
+    @JsonProperty(value = "subContractorId")
     private Integer subContractorId;
 
-    @JsonProperty("subContractorAmount")
-    private BigDecimal subContractorAmount;
+    @JsonProperty(value = "outputStepAmount")
+    private BigDecimal outputStepAmount;
+
+    @JsonProperty(value = "outputCategoryAmount")
+    private BigDecimal outputCategoryAmount;
 
 }

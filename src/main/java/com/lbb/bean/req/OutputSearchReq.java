@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class OutputValueIdReq {
+public class OutputSearchReq {
 
-    @JsonProperty(value = "outputValueId")
-    private Long outputValueId;
+    @JsonProperty(value = "outputTime")
+    private Integer outputTime;
 
 }

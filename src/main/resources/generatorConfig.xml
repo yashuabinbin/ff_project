@@ -7,7 +7,7 @@
 
     <!-- 数据库驱动 -->
     <classPathEntry
-            location="E:\repo\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
+            location="/Users/lubingbin/Documents/apache-maven-3.6.1/resp/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar"/>
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -69,8 +69,5 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
-
-
-
     </context>
 </generatorConfiguration>

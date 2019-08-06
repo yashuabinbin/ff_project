@@ -1,22 +1,15 @@
 package com.lbb.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class OutputValueModel extends BaseModel {
     private Long outputValueId;
 
-    private BigDecimal subContractorAmount;
-
-    private BigDecimal migrantWorkAmount;
-
-    private Date outputTime;
-
-    private String remark;
-
-    private Integer createUserId;
+    private Integer outputTime;
 
     private Date createTime;
+
+    private Integer createUserId;
 
     private Date lastModifyTime;
 
@@ -28,44 +21,12 @@ public class OutputValueModel extends BaseModel {
         this.outputValueId = outputValueId;
     }
 
-    public BigDecimal getSubContractorAmount() {
-        return subContractorAmount;
-    }
-
-    public void setSubContractorAmount(BigDecimal subContractorAmount) {
-        this.subContractorAmount = subContractorAmount;
-    }
-
-    public BigDecimal getMigrantWorkAmount() {
-        return migrantWorkAmount;
-    }
-
-    public void setMigrantWorkAmount(BigDecimal migrantWorkAmount) {
-        this.migrantWorkAmount = migrantWorkAmount;
-    }
-
-    public Date getOutputTime() {
+    public Integer getOutputTime() {
         return outputTime;
     }
 
-    public void setOutputTime(Date outputTime) {
+    public void setOutputTime(Integer outputTime) {
         this.outputTime = outputTime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public Integer getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
     }
 
     public Date getCreateTime() {
@@ -74,6 +35,14 @@ public class OutputValueModel extends BaseModel {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Integer createUserId) {
+        this.createUserId = createUserId;
     }
 
     public Date getLastModifyTime() {

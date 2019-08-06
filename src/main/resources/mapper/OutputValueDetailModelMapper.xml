@@ -1,157 +1,207 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lbb.dao.OutputValueDetailModelMapper" >
-  <resultMap id="BaseResultMap" type="com.lbb.model.OutputValueDetailModel" >
-    <id column="relation_id" property="relationId" jdbcType="BIGINT" />
-    <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER" />
-    <result column="output_value_id" property="outputValueId" jdbcType="BIGINT" />
-    <result column="output_value_rate" property="outputValueRate" jdbcType="DECIMAL" />
-    <result column="sub_contractor_amount" property="subContractorAmount" jdbcType="DECIMAL" />
-    <result column="migrant_worker_amount" property="migrantWorkerAmount" jdbcType="DECIMAL" />
-    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    relation_id, sub_contractor_id, output_value_id, output_value_rate, sub_contractor_amount, 
-    migrant_worker_amount, create_user_id, create_time, last_modify_time
-  </sql>
+<mapper namespace="com.lbb.dao.OutputValueDetailModelMapper">
+    <resultMap id="BaseResultMap" type="com.lbb.model.OutputValueDetailModel">
+        <id column="output_value_detail_id" property="outputValueDetailId" jdbcType="BIGINT"/>
+        <result column="sub_contractor_id" property="subContractorId" jdbcType="INTEGER"/>
+        <result column="output_value_id" property="outputValueId" jdbcType="BIGINT"/>
+        <result column="output_amount" property="outputAmount" jdbcType="DECIMAL"/>
+        <result column="output_category_amount" property="outputCategoryAmount" jdbcType="DECIMAL"/>
+        <result column="output_step_amount" property="outputStepAmount" jdbcType="DECIMAL"/>
+        <result column="income_amount" property="incomeAmount" jdbcType="DECIMAL"/>
+        <result column="income_category_amount" property="incomeCategoryAmount" jdbcType="DECIMAL"/>
+        <result column="income_step_amount" property="incomeStepAmount" jdbcType="DECIMAL"/>
+        <result column="pay_amount" property="payAmount" jdbcType="DECIMAL"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-    select
-    <include refid="Base_Column_List"/>
-    from output_value_detail
-    where relation_id = #{relationId,jdbcType=BIGINT}
-  </select>
+    <sql id="Base_Column_List">
+        output_value_detail_id, sub_contractor_id, output_value_id, output_amount, output_category_amount,
+        output_step_amount, income_amount, income_category_amount, income_step_amount, pay_amount,
+        create_user_id, create_time, last_modify_time
+    </sql>
 
-  <select id="selectListByOutputValueId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from output_value_detail
-    where output_value_id = #{outputValueId, jdbcType=BIGINT}
-  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from output_value_detail
+        where output_value_detail_id = #{outputValueDetailId,jdbcType=BIGINT}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from output_value_detail
-    where relation_id = #{relationId,jdbcType=BIGINT}
-  </delete>
+    <select id="selectListByOutputValueId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from output_value_detail
+        where output_value_id = #{outputValueId, jdbcType=BIGINT}
+    </select>
 
-  <delete id="deleteByOutputId" parameterType="java.lang.Long">
-    delete from output_value_detail
-    where output_value_id = #{outputValueId, jdbcType=BIGINT}
-  </delete>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from output_value_detail
+        where output_value_detail_id = #{outputValueDetailId,jdbcType=BIGINT}
+    </delete>
 
-  <insert id="insert" parameterType="com.lbb.model.OutputValueDetailModel" >
-    insert into output_value_detail (relation_id, sub_contractor_id, output_value_id, 
-      output_value_rate, sub_contractor_amount, migrant_worker_amount, 
-      create_user_id, create_time, last_modify_time
-      )
-    values (#{relationId,jdbcType=BIGINT}, #{subContractorId,jdbcType=INTEGER}, #{outputValueId,jdbcType=BIGINT}, 
-      #{outputValueRate,jdbcType=DECIMAL}, #{subContractorAmount,jdbcType=DECIMAL}, #{migrantWorkerAmount,jdbcType=DECIMAL}, 
-      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.lbb.model.OutputValueDetailModel" >
-    insert into output_value_detail
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="relationId != null" >
-        relation_id,
-      </if>
-      <if test="subContractorId != null" >
-        sub_contractor_id,
-      </if>
-      <if test="outputValueId != null" >
-        output_value_id,
-      </if>
-      <if test="outputValueRate != null" >
-        output_value_rate,
-      </if>
-      <if test="subContractorAmount != null" >
-        sub_contractor_amount,
-      </if>
-      <if test="migrantWorkerAmount != null" >
-        migrant_worker_amount,
-      </if>
-      <if test="createUserId != null" >
-        create_user_id,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="lastModifyTime != null" >
-        last_modify_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="relationId != null" >
-        #{relationId,jdbcType=BIGINT},
-      </if>
-      <if test="subContractorId != null" >
-        #{subContractorId,jdbcType=INTEGER},
-      </if>
-      <if test="outputValueId != null" >
-        #{outputValueId,jdbcType=BIGINT},
-      </if>
-      <if test="outputValueRate != null" >
-        #{outputValueRate,jdbcType=DECIMAL},
-      </if>
-      <if test="subContractorAmount != null" >
-        #{subContractorAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="migrantWorkerAmount != null" >
-        #{migrantWorkerAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="createUserId != null" >
-        #{createUserId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.OutputValueDetailModel" >
-    update output_value_detail
-    <set >
-      <if test="subContractorId != null" >
-        sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
-      </if>
-      <if test="outputValueId != null" >
-        output_value_id = #{outputValueId,jdbcType=BIGINT},
-      </if>
-      <if test="outputValueRate != null" >
-        output_value_rate = #{outputValueRate,jdbcType=DECIMAL},
-      </if>
-      <if test="subContractorAmount != null" >
-        sub_contractor_amount = #{subContractorAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="migrantWorkerAmount != null" >
-        migrant_worker_amount = #{migrantWorkerAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where relation_id = #{relationId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lbb.model.OutputValueDetailModel" >
+    <delete id="deleteByOutputValueId" parameterType="java.lang.Long">
+        delete from output_value_detail
+        where output_value_id = #{outputValueId, jdbcType=BIGINT}
+    </delete>
+
+
+    <insert id="insert" parameterType="com.lbb.model.OutputValueDetailModel">
+        insert into output_value_detail (output_value_detail_id, sub_contractor_id,
+          output_value_id, output_amount, output_category_amount,
+          output_step_amount, income_amount, income_category_amount,
+          income_step_amount, pay_amount, create_user_id,
+          create_time, last_modify_time)
+        values (#{outputValueDetailId,jdbcType=BIGINT}, #{subContractorId,jdbcType=INTEGER},
+          #{outputValueId,jdbcType=BIGINT}, #{outputAmount,jdbcType=DECIMAL}, #{outputCategoryAmount,jdbcType=DECIMAL},
+          #{outputStepAmount,jdbcType=DECIMAL}, #{incomeAmount,jdbcType=DECIMAL}, #{incomeCategoryAmount,jdbcType=DECIMAL},
+          #{incomeStepAmount,jdbcType=DECIMAL}, #{payAmount,jdbcType=DECIMAL}, #{createUserId,jdbcType=INTEGER},
+          #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.lbb.model.OutputValueDetailModel">
+        insert into output_value_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="outputValueDetailId != null">
+                output_value_detail_id,
+            </if>
+            <if test="subContractorId != null">
+                sub_contractor_id,
+            </if>
+            <if test="outputValueId != null">
+                output_value_id,
+            </if>
+            <if test="outputAmount != null">
+                output_amount,
+            </if>
+            <if test="outputCategoryAmount != null">
+                output_category_amount,
+            </if>
+            <if test="outputStepAmount != null">
+                output_step_amount,
+            </if>
+            <if test="incomeAmount != null">
+                income_amount,
+            </if>
+            <if test="incomeCategoryAmount != null">
+                income_category_amount,
+            </if>
+            <if test="incomeStepAmount != null">
+                income_step_amount,
+            </if>
+            <if test="payAmount != null">
+                pay_amount,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="outputValueDetailId != null">
+                #{outputValueDetailId,jdbcType=BIGINT},
+            </if>
+            <if test="subContractorId != null">
+                #{subContractorId,jdbcType=INTEGER},
+            </if>
+            <if test="outputValueId != null">
+                #{outputValueId,jdbcType=BIGINT},
+            </if>
+            <if test="outputAmount != null">
+                #{outputAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="outputCategoryAmount != null">
+                #{outputCategoryAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="outputStepAmount != null">
+                #{outputStepAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeAmount != null">
+                #{incomeAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeCategoryAmount != null">
+                #{incomeCategoryAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeStepAmount != null">
+                #{incomeStepAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="payAmount != null">
+                #{payAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lbb.model.OutputValueDetailModel">
+        update output_value_detail
+        <set>
+            <if test="subContractorId != null">
+                sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
+            </if>
+            <if test="outputValueId != null">
+                output_value_id = #{outputValueId,jdbcType=BIGINT},
+            </if>
+            <if test="outputAmount != null">
+                output_amount = #{outputAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="outputCategoryAmount != null">
+                output_category_amount = #{outputCategoryAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="outputStepAmount != null">
+                output_step_amount = #{outputStepAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeAmount != null">
+                income_amount = #{incomeAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeCategoryAmount != null">
+                income_category_amount = #{incomeCategoryAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="incomeStepAmount != null">
+                income_step_amount = #{incomeStepAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="payAmount != null">
+                pay_amount = #{payAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where output_value_detail_id = #{outputValueDetailId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lbb.model.OutputValueDetailModel">
     update output_value_detail
     set sub_contractor_id = #{subContractorId,jdbcType=INTEGER},
       output_value_id = #{outputValueId,jdbcType=BIGINT},
-      output_value_rate = #{outputValueRate,jdbcType=DECIMAL},
-      sub_contractor_amount = #{subContractorAmount,jdbcType=DECIMAL},
-      migrant_worker_amount = #{migrantWorkerAmount,jdbcType=DECIMAL},
+      output_amount = #{outputAmount,jdbcType=DECIMAL},
+      output_category_amount = #{outputCategoryAmount,jdbcType=DECIMAL},
+      output_step_amount = #{outputStepAmount,jdbcType=DECIMAL},
+      income_amount = #{incomeAmount,jdbcType=DECIMAL},
+      income_category_amount = #{incomeCategoryAmount,jdbcType=DECIMAL},
+      income_step_amount = #{incomeStepAmount,jdbcType=DECIMAL},
+      pay_amount = #{payAmount,jdbcType=DECIMAL},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
-    where relation_id = #{relationId,jdbcType=BIGINT}
+    where output_value_detail_id = #{outputValueDetailId,jdbcType=BIGINT}
   </update>
 </mapper>

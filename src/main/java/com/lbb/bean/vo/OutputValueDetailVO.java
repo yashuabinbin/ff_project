@@ -2,20 +2,36 @@ package com.lbb.bean.vo;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
-public class OutputValueDetailVO implements Serializable {
+public class OutputValueDetailVO {
 
-    private static final long serialVersionUID = 4540042939935377185L;
+    private Long outputValueDetailId;
 
     private Integer subContractorId;
 
-    private String subContractorName;
+    private Long outputValueId;
 
-    private BigDecimal subContractorAmount;
+    private BigDecimal outputAmount;
 
-    private BigDecimal migrantWorkerAmount;
+    private BigDecimal outputCategoryAmount;
+
+    private BigDecimal outputStepAmount;
+
+    private BigDecimal incomeAmount;
+
+    private BigDecimal incomeCategoryAmount;
+
+    private BigDecimal incomeStepAmount;
+
+    private BigDecimal payAmount;
+
+    private Integer createUserId;
+
+    private Date createTime;
+
+    private Date lastModifyTime;
 
 }
