@@ -37,6 +37,20 @@
         where output_value_id = #{outputValueId, jdbcType=BIGINT}
     </select>
 
+    <select id="selectSumList" resultType="com.lbb.model.OutputValueDetailModel">
+        select
+        sub_contractor_id,
+        sum(output_amount) as output_amount,
+        sum(output_category_amount) as output_category_amount,
+        sum(output_step_amount) as output_step_amount,
+        sum(income_amount) as income_amount,
+        sum(income_category_amount) as income_category_amount,
+        sum(income_step_amount) as income_step_amount,
+        sum(pay_amount) as pay_amount
+        from output_value_detail
+        group by sub_contractor_id
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from output_value_detail
         where output_value_detail_id = #{outputValueDetailId,jdbcType=BIGINT}

@@ -40,14 +40,21 @@ public class OutputValueServiceImpl implements OutputValueService {
     public ApiResp<OutputValueVO> getByOutputTime(OutputSearchReq req) {
         OutputValueVO outputValueVO = null;
 
-        OutputValueModel outputValueModel = this.outputValueModelMapper.selectByOutputTime(req.getOutputTime());
-        if (outputValueModel == null) {
-            return ApiResp.success();
+        if(req.getOutputTime() != null) {
+            OutputValueModel outputValueModel = this.outputValueModelMapper.selectByOutputTime(req.getOutputTime());
+            if (outputValueModel == null) {
+                return ApiResp.success();
+            }
+
+            List<OutputValueDetailModel> outputValueDetailModelList = this.outputValueDetailModelMapper.selectListByOutputValueId(outputValueModel.getOutputValueId());
+            outputValueVO = BeanUtils.convert(outputValueModel, OutputValueVO.class);
+            outputValueVO.setOutputValueDetailVOList(BeanUtils.convertList(outputValueDetailModelList, OutputValueDetailVO.class));
+        } else {
+            List<OutputValueDetailModel> outputValueDetailModelList = this.outputValueDetailModelMapper.selectSumList();
+            outputValueVO = new OutputValueVO();
+            outputValueVO.setOutputValueDetailVOList(BeanUtils.convertList(outputValueDetailModelList, OutputValueDetailVO.class));
         }
 
-        List<OutputValueDetailModel> outputValueDetailModelList = this.outputValueDetailModelMapper.selectListByOutputValueId(outputValueModel.getOutputValueId());
-        outputValueVO = BeanUtils.convert(outputValueModel, OutputValueVO.class);
-        outputValueVO.setOutputValueDetailVOList(BeanUtils.convertList(outputValueDetailModelList, OutputValueDetailVO.class));
         return ApiResp.successWithObj(outputValueVO);
     }
 

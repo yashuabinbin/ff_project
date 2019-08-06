@@ -24,4 +24,6 @@ public interface OutputValueDetailModelMapper {
     List<OutputValueDetailModel> selectListByOutputValueId(@Param("outputValueId") Long outputValueId);
 
     void deleteByOutputValueId(@Param("outputValueId") Long outputValueId);
+
+    List<OutputValueDetailModel> selectSumList();
 }
