@@ -7,10 +7,7 @@ import com.lbb.bean.resp.ApiResp;
 import com.lbb.service.OutputValueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -19,6 +16,18 @@ public class OutputValueController {
 
     @Autowired
     private OutputValueService outputValueService;
+
+    /**
+     * @description: 根据id获取产值信息
+     * @param:
+     * @return:
+     * @author: lubingbin
+     * @date: 2019-08-10 18:51
+     **/
+    @PostMapping(value = "/getById")
+    public ApiResp getByOutputValueId(@RequestBody OutputValueIdReq req) {
+        return outputValueService.getByOutputValueId(req);
+    }
 
     /**
      * @description: 获取产出时期列表

@@ -16,4 +16,6 @@ public interface OutputValueService {
     ApiResp outputValueEdit(OutputAddEditReq req);
 
     ApiResp outputValueDelete(OutputValueIdReq req);
+
+    ApiResp getByOutputValueId(OutputValueIdReq req);
 }

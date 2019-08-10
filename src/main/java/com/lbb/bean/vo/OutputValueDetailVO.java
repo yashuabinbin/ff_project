@@ -12,6 +12,8 @@ public class OutputValueDetailVO {
 
     private Integer subContractorId;
 
+    private String subContractorName;
+
     private Long outputValueId;
 
     private BigDecimal outputAmount;

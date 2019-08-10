@@ -19,6 +19,8 @@ public class OutputValueVO {
 
     private Date lastModifyTime;
 
-    private List<OutputValueDetailVO> outputValueDetailVOList;
+    private List<OutputDetailInfoDifVo> difVoList;
+
+    private List<OutputValueDetailVO> outputValueDetailList;
 
 }
